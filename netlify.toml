@@ -1,0 +1,5 @@
+[build]
+  # No necesitamos un comando de build porque es solo HTML/JS
+  command = "echo 'Building site...'"
+  # Directorio donde Netlify buscará tus funciones
+  functions = "netlify/functions"

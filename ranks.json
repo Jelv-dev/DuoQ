@@ -1,0 +1,42 @@
+[
+  {
+    "nombre": "PLATERO",
+    "tier": "DIAMOND",
+    "rank": "III"
+  },
+  {
+    "nombre": "NYRO",
+    "tier": "PLATINUM",
+    "rank": "I"
+  },
+  {
+    "nombre": "EMILIANO",
+    "tier": "GOLD",
+    "rank": "II"
+  },
+  {
+    "nombre": "LASO",
+    "tier": "SILVER",
+    "rank": "IV"
+  },
+  {
+    "nombre": "PRIE",
+    "tier": "EMERALD",
+    "rank": "II"
+  },
+  {
+    "nombre": "MASTERPAOLO",
+    "tier": "DIAMOND",
+    "rank": "IV"
+  },
+  {
+    "nombre": "ALBAN",
+    "tier": "UNRANKED",
+    "rank": ""
+  },
+  {
+    "nombre": "BAKAIK",
+    "tier": "PLATINUM",
+    "rank": "III"
+  }
+]
