@@ -3,7 +3,7 @@
 // NOTA IMPORTANTE: Para usar la Riot API, necesitamos la clave y la región.
 // Usaremos EUW para todos.
 const REGION = "euw1"; 
-const API_KEY = "RGAPI-1dfa0ca1-bb2c-4084-babc-2a6e858292fe"; // <<<<<< REEMPLAZA ESTO CON TU CLAVE REAL DE RIOT
+const API_KEY = "RGAPI-19f2e74a-09e9-489c-9787-c44219ae7d50"; // <<<<<< REEMPLAZA ESTO CON TU CLAVE REAL DE RIOT
 
 const parejasRanking = [
     {
