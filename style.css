@@ -1,0 +1,141 @@
+/* Tarea 3.3: Estilos básicos y responsive inspirados en League of Legends */
+
+:root {
+    --color-fondo-principal: #1a1a1a;
+    /* Negro oscuro */
+    --color-fondo-secundario: #2a2a2a;
+    /* Gris oscuro para las filas */
+    --color-dorado-lol: #c89b3c;
+    /* Dorado característico de LoL */
+    --color-gris-claro: #f0f0f0;
+    --color-borde: #3d3d3d;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: var(--color-fondo-principal);
+    color: var(--color-gris-claro);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* --- Encabezado y Título --- */
+
+header {
+    background-color: #0d1217;
+    /* Fondo aún más oscuro */
+    padding: 20px 0;
+    width: 100%;
+    text-align: center;
+    border-bottom: 3px solid var(--color-dorado-lol);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    margin-bottom: 30px;
+}
+
+h1 {
+    color: var(--color-dorado-lol);
+    margin: 0;
+    font-size: 2.2em;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+p {
+    color: #aaa;
+    margin-top: 5px;
+}
+
+/* --- Contenedor Principal y Tabla --- */
+
+main {
+    width: 95%;
+    max-width: 1400px;
+    padding: 10px;
+}
+
+#ranking-table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7);
+    background-color: var(--color-fondo-secundario);
+    overflow-x: auto;
+    /* Permite desplazamiento horizontal en móviles si es necesario */
+}
+
+/* Cabecera de la tabla */
+#ranking-table thead th {
+    background-color: #3d3d3d;
+    color: var(--color-dorado-lol);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 15px 10px;
+    border-bottom: 2px solid var(--color-dorado-lol);
+    text-align: left;
+}
+
+/* Celdas de la tabla */
+#ranking-table td {
+    border: 1px solid var(--color-borde);
+    padding: 12px 10px;
+    text-align: left;
+}
+
+/* Estilo para filas pares (zebra stripes) */
+#ranking-table tbody tr:nth-child(even) {
+    background-color: #333;
+}
+
+/* Efecto hover */
+#ranking-table tbody tr:hover {
+    background-color: #444;
+}
+
+/* Columna de Puesto (Pillar) */
+#ranking-table td:first-child {
+    text-align: center;
+    font-weight: 900;
+    /* Extra negrita */
+    font-size: 1.2em;
+    color: var(--color-dorado-lol);
+    background-color: #3d3d3d;
+}
+
+/* Rango Destacado */
+strong {
+    color: #fff;
+    font-weight: bold;
+}
+
+/* --- Adaptación a Dispositivos Móviles (Responsive) --- */
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.6em;
+    }
+
+    /* Ocultar algunas columnas en pantallas pequeñas */
+    #ranking-table th:nth-child(4),
+    #ranking-table td:nth-child(4),
+    #ranking-table th:nth-child(5),
+    #ranking-table td:nth-child(5) {
+        /* Oculta los rangos individuales de Miembro 1 y Miembro 2 */
+        display: none;
+    }
+
+    /* Mostrar una versión más compacta del rango en el móvil */
+    #ranking-table th:nth-child(3),
+    #ranking-table td:nth-child(3) {
+        /* Poner el Rango y el Miembro en una sola columna visible */
+        width: 60%;
+    }
+
+    #ranking-table td {
+        padding: 10px 8px;
+        font-size: 0.9em;
+    }
+}
