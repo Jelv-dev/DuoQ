@@ -1,10 +1,8 @@
 // =================================================================
-// SCRIPT.JS - CÓDIGO FINAL DE CLIENTE (LLAMANDO AL PROXY DE NETLIFY)
+// SCRIPT.JS - CÓDIGO FINAL DE CLIENTE (INTENTO DE LEAGUE OF GRAPHS)
 // =================================================================
 
-// La URL donde Netlify aloja nuestra función
-const NETLIFY_FUNCTION_URL = '/.netlify/functions/opgg-rank'; 
-const REGION = "euw"; 
+const REGION = "euw"; // LoG usa "euw" en minúsculas en su endpoint.
 
 const parejasRanking = [
     {
@@ -41,48 +39,59 @@ const parejasRanking = [
     }
 ];
 
-
 /**
- * Obtiene la información del rango de Solo/Duo Queue llamando a la Netlify Function.
+ * Obtiene la información del rango, incluyendo LP, de LoG.
+ * FALLARÁ EN LIVE SERVER POR EL BLOQUEO CORS.
  */
 async function getSummonerRank(summonerName) {
-    if (!summonerName) return { tier: "ERROR", rank: "" };
+    if (!summonerName) return null;
 
-    const PROXY_URL = `${NETLIFY_FUNCTION_URL}?name=${encodeURIComponent(summonerName)}&region=${REGION}`;
-
+    // Endpoint de la API interna de League of Graphs
+    const LOG_API_URL = `https://www.leagueofgraphs.com/api/summoner/${REGION}/${summonerName}`;
+    
     try {
-        const response = await fetch(PROXY_URL);
+        const response = await fetch(LOG_API_URL);
         
+        // Bloqueo CORS/Fallo de red ocurrirá aquí en Live Server.
         if (!response.ok) {
-            console.error(`Error ${response.status} al llamar a Netlify Function.`);
-            return { tier: "ERROR API", rank: "" };
+            console.error(`Error ${response.status} o CORS al buscar rango en LoG para ${summonerName}.`);
+            return { tier: "FALLO API", rank: "", lp: 0 };
         }
         
-        const rankData = await response.json();
+        const data = await response.json();
         
-        if (rankData.error) {
-            console.error("Error devuelto por la función:", rankData.error);
-            return { tier: "ERROR PROXY", rank: "" };
+        // LoG suele devolver un objeto de 'soloQueue'.
+        const soloDuoEntry = data.soloQueue; 
+
+        if (!soloDuoEntry || !soloDuoEntry.tier) {
+             return { tier: "UNRANKED", rank: "", lp: 0 }; 
         }
+
+        // LoG devuelve el rango como "DIAMOND IV"
+        const [tier, rank] = soloDuoEntry.tier.toUpperCase().split(' ');
+        
+        // LP se encuentra en otro campo. Si es sin rank (ej. Master+), solo devolvemos los LP.
+        const lp = soloDuoEntry.leaguePoints || 0;
 
         return { 
-            tier: rankData.tier || "UNRANKED",
-            rank: rankData.rank || ""
+            tier: tier,
+            rank: rank || "", // Puede que no haya rank (e.g., Challenger)
+            lp: lp
         };
 
     } catch (error) {
-        console.error("Error de red o CORS:", error);
-        return { tier: "FALLO RED", rank: "" }; 
+        console.error("Error crítico en getSummonerRank (LoG directo):", error);
+        return { tier: "FALLO RED", rank: "", lp: 0 }; 
     }
 }
 
 
-// --- LÓGICA DE CLASIFICACIÓN, ORDENACIÓN Y VISUALIZACIÓN (IDÉNTICA A LA VERSIÓN FUNCIONAL) ---
+// --- LÓGICA DE CLASIFICACIÓN Y ORDENACIÓN (CON LP) ---
 
 const TIER_ORDER = {
     "CHALLENGER": 8, "GRANDMASTER": 7, "MASTER": 6, "DIAMOND": 5, "EMERALD": 4, 
     "PLATINUM": 3, "GOLD": 2, "SILVER": 1, "BRONZE": 0, "IRON": -1, 
-    "UNRANKED": -2, "ERROR API": -3, "ERROR PROXY": -4, "FALLO RED": -5
+    "UNRANKED": -2, "FALLO API": -3, "FALLO RED": -4
 };
 
 const RANK_ORDER = {
@@ -98,13 +107,21 @@ function determinarMejorRango(miembros) {
         const actual = miembros[i];
         const valorMejor = TIER_ORDER[mejor.rango.tier] || TIER_ORDER["FALLO RED"];
         const valorActual = TIER_ORDER[actual.rango.tier] || TIER_ORDER["FALLO RED"];
+
+        // 1. Compara Tier
         if (valorActual > valorMejor) {
             mejor = actual;
+        // 2. Compara Rank (División) si Tier es igual
         } else if (valorActual === valorMejor) {
             const divisionMejor = RANK_ORDER[mejor.rango.rank] || 0;
             const divisionActual = RANK_ORDER[actual.rango.rank] || 0;
             if (divisionActual > divisionMejor) {
                 mejor = actual;
+            // 3. Compara LP si Tier y Rank son iguales
+            } else if (divisionActual === divisionMejor) {
+                 if (actual.rango.lp > mejor.rango.lp) {
+                    mejor = actual;
+                 }
             }
         }
     }
@@ -117,10 +134,10 @@ async function actualizarRanking(parejas) {
         const resultadosMiembros = [];
         for (const miembro of pareja.miembros) {
             
-            // LLAMADA AL PROXY DE NETLIFY
             const rankData = await getSummonerRank(miembro.summonerName); 
             
-            miembro.rangoDisplay = `${rankData.tier || 'UNRANKED'} ${rankMapDisplay[rankData.rank] || ''}`; 
+            // Ejemplo: "DIAMOND IV (25 LP)"
+            miembro.rangoDisplay = `${rankData.tier || 'UNRANKED'} ${rankMapDisplay[rankData.rank] || ''} ${rankData.lp > 0 ? `(${rankData.lp} LP)` : ''}`; 
             
             resultadosMiembros.push({
                 nombre: miembro.nombre,
@@ -130,7 +147,10 @@ async function actualizarRanking(parejas) {
         
         const mejorMiembro = determinarMejorRango(resultadosMiembros);
         pareja.rankingData.mejorMiembro = mejorMiembro;
-        pareja.rankingData.rangoCalculado = `${mejorMiembro.rango.tier} ${mejorMiembro.rango.rank} (${mejorMiembro.nombre})`;
+        
+        // Display del mejor rango para la pareja: "DIAMOND IV (25 LP)"
+        const mejorRangoDisplay = `${mejorMiembro.rango.tier} ${rankMapDisplay[mejorMiembro.rango.rank] || ''} ${mejorMiembro.rango.lp > 0 ? `(${mejorMiembro.rango.lp} LP)` : ''}`;
+        pareja.rankingData.rangoCalculado = `${mejorRangoDisplay} (${mejorMiembro.nombre})`;
         
         parejasActualizadas.push(pareja);
     }
@@ -155,8 +175,9 @@ function ordenarRanking(parejas) {
         if (valorRankA !== valorRankB) {
             return valorRankB - valorRankA;
         }
-
-        return 0;
+        
+        // Desempate por LP
+        return rangoB.lp - rangoA.lp;
     });
 }
 
@@ -168,15 +189,12 @@ function mostrarRankingEnTabla(parejasOrdenadas) {
     parejasOrdenadas.forEach((pareja, index) => {
         const miembro1 = pareja.miembros[0];
         const miembro2 = pareja.miembros[1];
-        const mejorRango = pareja.rankingData.mejorMiembro.rango;
-        
-        const rangoPareja = `${mejorRango.tier || 'SIN DATOS'} ${rankMapDisplay[mejorRango.rank] || ''}`;
         
         const nuevaFila = document.createElement('tr');
         nuevaFila.innerHTML = `
             <td>${index + 1}</td> 
             <td>${pareja.pareja}</td>
-            <td><strong>${rangoPareja}</strong> (${pareja.rankingData.mejorMiembro.nombre})</td>
+            <td><strong>${pareja.rankingData.rangoCalculado}</strong></td>
             <td>${miembro1.nombre} - ${miembro1.rangoDisplay || 'Cargando...'}</td>
             <td>${miembro2.nombre} - ${miembro2.rangoDisplay || 'Cargando...'}</td>
         `;
