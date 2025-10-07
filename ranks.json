@@ -1,0 +1,66 @@
+[
+  {
+    "nombre": "PLATERO",
+    "summonerName": "NasusSanchez",
+    "tier": "DIAMOND",
+    "rank": "III",
+    "lp": 75,
+    "leagueOfGraphsUrl": "https://www.leagueofgraphs.com/summoner/euw/NasusSanchez-Dogy"
+  },
+  {
+    "nombre": "NYRO",
+    "summonerName": "fREEaBALOS",
+    "tier": "PLATINUM",
+    "rank": "I",
+    "lp": 50,
+    "leagueOfGraphsUrl": "https://www.leagueofgraphs.com/summoner/euw/fREEaBALOS-PSOE"
+  },
+  {
+    "nombre": "EMILIANO",
+    "summonerName": "AntonioAlcántara",
+    "tier": "GOLD",
+    "rank": "II",
+    "lp": 25,
+    "leagueOfGraphsUrl": "https://www.leagueofgraphs.com/summoner/euw/AntonioAlcántara-5377"
+  },
+  {
+    "nombre": "LASO",
+    "summonerName": "DON PABLO",
+    "tier": "SILVER",
+    "rank": "IV",
+    "lp": 99,
+    "leagueOfGraphsUrl": "https://www.leagueofgraphs.com/summoner/euw/DON+PABLO-winer"
+  },
+  {
+    "nombre": "PRIE",
+    "summonerName": "Jacob Nieto",
+    "tier": "EMERALD",
+    "rank": "II",
+    "lp": 60,
+    "leagueOfGraphsUrl": "https://www.leagueofgraphs.com/summoner/euw/Jacob+Nieto-PAL"
+  },
+  {
+    "nombre": "MASTERPAOLO",
+    "summonerName": "LuisAlcaldeCalvo",
+    "tier": "DIAMOND",
+    "rank": "IV",
+    "lp": 100,
+    "leagueOfGraphsUrl": "https://www.leagueofgraphs.com/summoner/euw/LuisAlcaldeCalvo-1325"
+  },
+  {
+    "nombre": "ALBAN",
+    "summonerName": "thatwasepic",
+    "tier": "UNRANKED",
+    "rank": "",
+    "lp": 0,
+    "leagueOfGraphsUrl": "https://www.leagueofgraphs.com/summoner/euw/thatwasepic-XOKAS"
+  },
+  {
+    "nombre": "BAKAIK",
+    "summonerName": "gpe",
+    "tier": "PLATINUM",
+    "rank": "III",
+    "lp": 80,
+    "leagueOfGraphsUrl": "https://www.leagueofgraphs.com/summoner/euw/gpe-38210"
+  }
+]
