@@ -175,7 +175,7 @@ function renderAdminTable() {
 
         // --- Selector de LIGA (Tier) ---
         const tierCell = document.createElement('td');
-        tierCell.setAttribute('data-label', 'Liga');
+        tierCell.setAttribute('data-label', 'Liga (Tier)');
         const tierSelect = document.createElement('select');
         tierSelect.id = `tier-${member.nombre}`;
         TIER_OPTIONS.forEach((tier) => {
@@ -215,13 +215,35 @@ function renderAdminTable() {
         lpCell.appendChild(lpInput);
         row.appendChild(lpCell);
 
+        // --- Input de Victorias (W) ---
+        const winsCell = document.createElement('td');
+        winsCell.setAttribute('data-label', 'Victorias (W)');
+        const winsInput = document.createElement('input');
+        winsInput.type = 'number';
+        winsInput.min = 0;
+        winsInput.id = `wins-${member.nombre}`;
+        winsInput.value = member.wins || 0;
+        winsCell.appendChild(winsInput);
+        row.appendChild(winsCell);
+
+        // --- Input de Derrotas (L) ---
+        const lossesCell = document.createElement('td');
+        lossesCell.setAttribute('data-label', 'Derrotas (L)');
+        const lossesInput = document.createElement('input');
+        lossesInput.type = 'number';
+        lossesInput.min = 0;
+        lossesInput.id = `losses-${member.nombre}`;
+        lossesInput.value = member.losses || 0;
+        lossesCell.appendChild(lossesInput);
+        row.appendChild(lossesCell);
+
         memberFormsContainer.appendChild(row);
     });
 }
 
 async function loadAdminPanel() {
     const memberFormsContainer = document.getElementById('member-forms-container');
-    memberFormsContainer.innerHTML = '<tr><td colspan="4">Cargando datos...</td></tr>';
+    memberFormsContainer.innerHTML = '<tr><td colspan="6">Cargando datos...</td></tr>';
     
     // Obtenemos los datos y los guardamos en el estado global
     currentAdminData = await getFirebaseData();
@@ -241,14 +263,18 @@ document.getElementById('save-button').addEventListener('click', async () => {
         const tierSelect = document.getElementById(`tier-${member.nombre}`);
         const rankSelect = document.getElementById(`rank-${member.nombre}`);
         const lpInput = document.getElementById(`lp-${member.nombre}`);
+        const winsInput = document.getElementById(`wins-${member.nombre}`);
+        const lossesInput = document.getElementById(`losses-${member.nombre}`);
         
-        if (tierSelect && rankSelect && lpInput) {
+        if (tierSelect && rankSelect && lpInput && winsInput && lossesInput) {
             // Se actualiza el objeto con los nuevos valores del formulario
             return {
                 ...member,
                 tier: tierSelect.value,
                 rank: rankSelect.value,
                 lp: parseInt(lpInput.value, 10) || 0,
+                wins: parseInt(winsInput.value, 10) || 0,
+                losses: parseInt(lossesInput.value, 10) || 0,
             };
         }
         return member; // Devolver el miembro sin cambios si no se encuentran los inputs

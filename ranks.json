@@ -5,6 +5,8 @@
     "tier": "DIAMOND",
     "rank": "III",
     "lp": 75,
+    "wins": 120,
+    "losses": 105,
     "leagueOfGraphsUrl": "https://www.leagueofgraphs.com/summoner/euw/NasusSanchez-Dogy"
   },
   {
@@ -13,6 +15,8 @@
     "tier": "PLATINUM",
     "rank": "I",
     "lp": 50,
+    "wins": 80,
+    "losses": 75,
     "leagueOfGraphsUrl": "https://www.leagueofgraphs.com/summoner/euw/fREEaBALOS-PSOE"
   },
   {
@@ -21,6 +25,8 @@
     "tier": "GOLD",
     "rank": "II",
     "lp": 25,
+    "wins": 55,
+    "losses": 45,
     "leagueOfGraphsUrl": "https://www.leagueofgraphs.com/summoner/euw/AntonioAlcántara-5377"
   },
   {
@@ -29,6 +35,8 @@
     "tier": "SILVER",
     "rank": "IV",
     "lp": 99,
+    "wins": 200,
+    "losses": 210,
     "leagueOfGraphsUrl": "https://www.leagueofgraphs.com/summoner/euw/DON+PABLO-winer"
   },
   {
@@ -37,6 +45,8 @@
     "tier": "EMERALD",
     "rank": "II",
     "lp": 60,
+    "wins": 95,
+    "losses": 80,
     "leagueOfGraphsUrl": "https://www.leagueofgraphs.com/summoner/euw/Jacob+Nieto-PAL"
   },
   {
@@ -45,6 +55,8 @@
     "tier": "DIAMOND",
     "rank": "IV",
     "lp": 100,
+    "wins": 150,
+    "losses": 130,
     "leagueOfGraphsUrl": "https://www.leagueofgraphs.com/summoner/euw/LuisAlcaldeCalvo-1325"
   },
   {
@@ -53,6 +65,8 @@
     "tier": "UNRANKED",
     "rank": "",
     "lp": 0,
+    "wins": 0,
+    "losses": 0,
     "leagueOfGraphsUrl": "https://www.leagueofgraphs.com/summoner/euw/thatwasepic-XOKAS"
   },
   {
@@ -61,6 +75,8 @@
     "tier": "PLATINUM",
     "rank": "III",
     "lp": 80,
+    "wins": 60,
+    "losses": 50,
     "leagueOfGraphsUrl": "https://www.leagueofgraphs.com/summoner/euw/gpe-38210"
   }
 ]

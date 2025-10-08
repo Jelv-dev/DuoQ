@@ -1,141 +1,228 @@
-/* Tarea 3.3: Estilos básicos y responsive inspirados en League of Legends */
-
 :root {
-    --color-fondo-principal: #1a1a1a;
-    /* Negro oscuro */
-    --color-fondo-secundario: #2a2a2a;
-    /* Gris oscuro para las filas */
-    --color-dorado-lol: #c89b3c;
-    /* Dorado característico de LoL */
-    --color-gris-claro: #f0f0f0;
-    --color-borde: #3d3d3d;
+    --lol-dark-blue: #010a13;
+    --lol-dark-grey: #1e2328;
+    --lol-gold: #c89b3c;
+    --lol-gold-hover: #f0e6d2;
+    --lol-light-grey: #a09b8c;
+    --lol-cyan: #00a6b2;
+    --lol-border: #3c3c41;
 }
 
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: var(--color-fondo-principal);
-    color: var(--color-gris-claro);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--lol-dark-blue);
+    color: var(--lol-light-grey);
     margin: 0;
-    padding: 0;
     display: flex;
-    flex-direction: column;
     align-items: center;
+    justify-content: center;
     min-height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
-/* --- Encabezado y Título --- */
-
-header {
-    background-color: #0d1217;
-    /* Fondo aún más oscuro */
-    padding: 20px 0;
-    width: 100%;
-    text-align: center;
-    border-bottom: 3px solid var(--color-dorado-lol);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-    margin-bottom: 30px;
+.container {
+    width: 95%;
+    max-width: 1200px;
 }
 
 h1 {
-    color: var(--color-dorado-lol);
-    margin: 0;
+    text-align: center;
+    color: var(--lol-gold);
     font-size: 2.2em;
     text-transform: uppercase;
     letter-spacing: 2px;
+    border-bottom: 2px solid var(--lol-border);
+    padding-bottom: 15px;
+    margin-bottom: 30px;
 }
 
-p {
-    color: #aaa;
-    margin-top: 5px;
-}
-
-/* --- Contenedor Principal y Tabla --- */
-
-main {
-    width: 95%;
-    max-width: 1400px;
-    padding: 10px;
-}
-
-#ranking-table {
+/* --- ESTILOS DE TABLA (Comunes para index y admin) --- */
+table {
     width: 100%;
     border-collapse: collapse;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7);
-    background-color: var(--color-fondo-secundario);
-    overflow-x: auto;
-    /* Permite desplazamiento horizontal en móviles si es necesario */
+    margin-top: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    background-color: var(--lol-dark-grey);
 }
 
-/* Cabecera de la tabla */
-#ranking-table thead th {
-    background-color: #3d3d3d;
-    color: var(--color-dorado-lol);
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--lol-border);
+}
+
+th {
+    background-color: #010a13;
+    color: var(--lol-gold);
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 1px;
-    padding: 15px 10px;
-    border-bottom: 2px solid var(--color-dorado-lol);
-    text-align: left;
 }
 
-/* Celdas de la tabla */
-#ranking-table td {
-    border: 1px solid var(--color-borde);
-    padding: 12px 10px;
-    text-align: left;
+tr:hover {
+    background-color: #2a3138;
 }
 
-/* Estilo para filas pares (zebra stripes) */
-#ranking-table tbody tr:nth-child(even) {
-    background-color: #333;
-}
-
-/* Efecto hover */
-#ranking-table tbody tr:hover {
-    background-color: #444;
-}
-
-/* Columna de Puesto (Pillar) */
-#ranking-table td:first-child {
-    text-align: center;
-    font-weight: 900;
-    /* Extra negrita */
-    font-size: 1.2em;
-    color: var(--color-dorado-lol);
-    background-color: #3d3d3d;
-}
-
-/* Rango Destacado */
 strong {
-    color: #fff;
+    color: var(--lol-gold-hover);
     font-weight: bold;
 }
 
-/* --- Adaptación a Dispositivos Móviles (Responsive) --- */
+a {
+    color: var(--lol-cyan);
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
 
+/* --- ESTILOS ESPECÍFICOS DEL FOOTER Y BOTONES --- */
+footer, .footer-nav {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--lol-border);
+}
+
+button, footer a {
+    background-color: transparent;
+    border: 2px solid var(--lol-gold);
+    color: var(--lol-gold);
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: background-color 0.3s, color 0.3s;
+    margin-top: 20px;
+}
+
+button:hover, footer a:hover {
+    background-color: var(--lol-gold);
+    color: var(--lol-dark-blue);
+}
+
+/* --- ESTILOS DEL PANEL DE ADMINISTRACIÓN --- */
+#login-form, #admin-panel {
+    padding: 30px;
+    border: 1px solid var(--lol-border);
+    background-color: var(--lol-dark-grey);
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+#admin-panel p {
+    color: var(--lol-light-grey);
+}
+
+label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+    color: var(--lol-gold);
+}
+
+input[type="text"], input[type="password"], input[type="number"], select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid var(--lol-border);
+    border-radius: 4px;
+    background-color: var(--lol-dark-blue);
+    color: var(--lol-gold-hover);
+    box-sizing: border-box;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--lol-cyan);
+}
+
+.hidden { display: none; }
+
+.save-message.success {
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 4px;
+    font-weight: bold;
+    background-color: var(--lol-cyan);
+    color: var(--lol-dark-blue);
+    text-align: center;
+}
+
+/* Ordenación de tabla en Admin */
+.admin-table th.sortable {
+    cursor: pointer;
+    user-select: none;
+}
+.admin-table th.sortable:hover {
+    background-color: #2a3138;
+}
+.sort-arrow {
+    color: var(--lol-cyan);
+}
+
+/* --- RESPONSIVIDAD PARA MÓVILES --- */
 @media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
     h1 {
         font-size: 1.6em;
     }
-
-    /* Ocultar algunas columnas en pantallas pequeñas */
-    #ranking-table th:nth-child(4),
-    #ranking-table td:nth-child(4),
-    #ranking-table th:nth-child(5),
-    #ranking-table td:nth-child(5) {
-        /* Oculta los rangos individuales de Miembro 1 y Miembro 2 */
+    table thead {
         display: none;
     }
+    table, table tbody, table tr, table td {
+        display: block;
+        width: 100%;
+    }
+    table tr {
+        margin-bottom: 15px;
+        /* 1. Centramos la tarjeta y le damos un ancho máximo para que no ocupe toda la pantalla */
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+        border: 1px solid var(--lol-border);
+        border-radius: 5px;
+        background-color: var(--lol-dark-grey);
+        /* Añadimos padding a la tarjeta (tr) para que todo el contenido interior respete los márgenes */
+        padding: 10px;
+    }
+    table td {
+        /* Reemplazamos el hack de padding/position por un sistema de Grid robusto */
+        display: grid;
+        grid-template-columns: 40% 60%; /* 40% para la etiqueta, 60% para el valor */
+        align-items: center; /* Centra verticalmente el contenido */
+        padding: 8px 0; /* Reducimos un poco el padding vertical para un look más compacto */
+        text-align: right; /* Mantenemos el valor alineado a la derecha */
 
-    /* Mostrar una versión más compacta del rango en el móvil */
-    #ranking-table th:nth-child(3),
-    #ranking-table td:nth-child(3) {
-        /* Poner el Rango y el Miembro en una sola columna visible */
-        width: 60%;
+        border-bottom: 1px solid var(--lol-border);
+        /* --- SOLUCIÓN PARA EL TEXTO LARGO --- */
+        overflow-wrap: break-word; /* Rompe palabras largas para que no se salgan */
+        word-wrap: break-word;     /* Alternativa para navegadores antiguos */
     }
 
-    #ranking-table td {
-        padding: 10px 8px;
-        font-size: 0.9em;
+    table tr:last-child td:last-child, table td:last-child {
+        border-bottom: 0;
+    }
+
+    table td::before {
+        /* El pseudo-elemento ahora es un item de la Grid, no necesita posicionamiento absoluto */
+        content: attr(data-label);
+        font-weight: bold;
+        text-align: left;
+        color: var(--lol-gold);
+    }
+
+    /* Ajustes específicos para la tabla de admin en móvil */
+    .admin-table td {
+        background-color: var(--lol-dark-grey);
+    }
+    .admin-table input, .admin-table select {
+        /* Hacemos que los inputs ocupen todo el espacio de su columna en la grid */
+        width: 100%;
+        box-sizing: border-box;
     }
 }

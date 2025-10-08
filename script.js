@@ -67,7 +67,9 @@ async function fetchRankData() {
                 ...entry, // Copiamos todas las propiedades
                 tier: entry.tier.toUpperCase(),
                 rank: entry.rank.toUpperCase(),
-                lp: entry.lp || 0
+                lp: entry.lp || 0,
+                wins: entry.wins || 0,
+                losses: entry.losses || 0
             };
         });
         return rankMap;
@@ -105,7 +107,7 @@ async function actualizarRanking(parejas) {
     const rankDataMap = await fetchRankData();
 
     if (!rankDataMap) {
-        document.getElementById('ranking-body').innerHTML = `
+        document.getElementById('ranking-body').innerHTML = ` 
     <tr>
         <td colspan="5" style="color: red; font-weight: bold; text-align: center;">ERROR: No se pudo cargar ranks.json. Revisa la consola para más detalles.</td>
     </tr>
@@ -118,11 +120,21 @@ async function actualizarRanking(parejas) {
         const resultadosMiembros = [];
         for (const miembro of pareja.miembros) {
 
-            const rankData = rankDataMap[miembro.nombre] || { tier: "SIN DATOS", rank: "", lp: 0, summonerName: "N/A", leagueOfGraphsUrl: "#" };
+            const rankData = rankDataMap[miembro.nombre] || { tier: "SIN DATOS", rank: "", lp: 0, wins: 0, losses: 0, summonerName: "N/A", leagueOfGraphsUrl: "#" };
 
             // Genera el display de rango con LP
             const lpDisplay = rankData.lp > 0 && rankData.tier !== "UNRANKED" ? `(${rankData.lp} LP)` : '';
-            miembro.rangoDisplay = `${rankData.tier || 'UNRANKED'} ${rankMapDisplay[rankData.rank] || ''} ${lpDisplay}`;
+            
+            // Genera el display de W/L y Win Rate
+            const totalGames = rankData.wins + rankData.losses;
+            const winRate = totalGames > 0 ? Math.round((rankData.wins / totalGames) * 100) : 0;
+            const statsDisplay = totalGames > 0 ? `| ${rankData.wins}W / ${rankData.losses}L (${winRate}%)` : '';
+
+            miembro.rangoDisplay = `
+                ${rankData.tier || 'UNRANKED'} 
+                ${rankMapDisplay[rankData.rank] || ''} 
+                ${lpDisplay} ${statsDisplay}
+            `;
 
             // Adjunta datos al miembro para su uso posterior
             miembro.leagueOfGraphsUrl = rankData.leagueOfGraphsUrl;
@@ -193,11 +205,11 @@ function mostrarRankingEnTabla(parejasOrdenadas) {
 
         const nuevaFila = document.createElement('tr');
         nuevaFila.innerHTML = `
-    <td>${podium}</td>
-    <td>${pareja.pareja}</td>
-    <td><strong>${pareja.rankingData.rangoCalculado}</strong></td>
-    <td>${miembro1Link} (${miembro1.summonerName || 'N/A'}) - ${miembro1.rangoDisplay || 'Cargando...'}</td>
-    <td>${miembro2Link} (${miembro2.summonerName || 'N/A'}) - ${miembro2.rangoDisplay || 'Cargando...'}</td>
+    <td data-label="Puesto">${podium}</td>
+    <td data-label="Pareja">${pareja.pareja}</td>
+    <td data-label="Mejor Rango"><strong>${pareja.rankingData.rangoCalculado}</strong></td>
+    <td data-label="Miembro 1">${miembro1Link} (${miembro1.summonerName || 'N/A'}) - ${miembro1.rangoDisplay || 'Cargando...'}</td>
+    <td data-label="Miembro 2">${miembro2Link} (${miembro2.summonerName || 'N/A'}) - ${miembro2.rangoDisplay || 'Cargando...'}</td>
     `;
 
         tbody.appendChild(nuevaFila);
