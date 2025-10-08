@@ -48,8 +48,10 @@ const firebaseConfig = {
   measurementId: "G-H0RERB82FJ"
 };
 
-// Inicializar Firebase
-firebase.initializeApp(firebaseConfig);
+// Inicializar Firebase (de forma segura, para evitar errores de doble inicialización)
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
 const database = firebase.database();
 
 async function fetchRankData() {
