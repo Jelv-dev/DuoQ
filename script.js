@@ -33,32 +33,34 @@ const parejasRanking = [
 ];
 
 
-// --- LECTURA DE DATOS (DEL ARCHIVO JSON LOCAL) ---
+// --- LECTURA DE DATOS (DESDE FIREBASE) ---
 
-const DATA_STORAGE_KEY = 'duoq_ranking_data'; // Clave para localStorage
+// Pega aquí la misma configuración de Firebase que en admin.js
+const firebaseConfig = {
+  // Esta es tu configuración real de Firebase.
+  apiKey: "AIzaSyCRXbOEAp1QafN_EGyEdWGZXxbeXy0aZE4",
+  authDomain: "duoq-ranking-final.firebaseapp.com",
+  databaseURL: "https://duoq-ranking-final-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "duoq-ranking-final",
+  storageBucket: "duoq-ranking-final.firebasestorage.app",
+  messagingSenderId: "834663193099",
+  appId: "1:834663193099:web:32095cc8cedd420143c50e",
+  measurementId: "G-H0RERB82FJ"
+};
+
+// Inicializar Firebase
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
 
 async function fetchRankData() {
     try {
-        let data;
-        const localData = localStorage.getItem(DATA_STORAGE_KEY);
-
-        if (localData) {
-            // Si hay datos en localStorage, úsalos
-            console.log("Cargando datos desde localStorage.");
-            data = JSON.parse(localData);
-        } else {
-            // Si no, carga desde ranks.json como fallback
-            console.log("Cargando datos desde ranks.json (fallback).");
-            const response = await fetch('ranks.json');
-            if (!response.ok) {
-                console.error(`Error al cargar ranks.json: ${response.statusText}`);
-                return null;
-            }
-            data = await response.json();
-        }
+        console.log("Cargando datos desde Firebase...");
+        const snapshot = await database.ref('/').once('value');
+        const data = snapshot.val();
+        const dataArray = data ? Object.values(data) : [];
 
         const rankMap = {};
-        data.forEach(entry => {
+        dataArray.forEach(entry => {
             rankMap[entry.nombre] = {
                 ...entry, // Copiamos todas las propiedades
                 tier: entry.tier.toUpperCase(),
@@ -68,7 +70,7 @@ async function fetchRankData() {
         });
         return rankMap;
     } catch (error) {
-        console.error("Fallo en la lectura de datos de ranking:", error);
+        console.error("Fallo en la lectura de datos desde Firebase:", error);
         return null;
     }
 }

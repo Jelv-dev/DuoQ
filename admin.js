@@ -12,7 +12,23 @@ const RANK_ORDER = { "I": 4, "II": 3, "III": 2, "IV": 1, "": 0 };
 // Credenciales (simuladas en front-end)
 const ADMIN_USER = "duoq_master";
 const ADMIN_PASS = "DuoQ!R4nkMaster24";
-const DATA_STORAGE_KEY = 'duoq_ranking_data';
+// --- CONFIGURACIÓN DE FIREBASE ---
+// Pega aquí la configuración que te dio Firebase
+const firebaseConfig = {
+  // Esta es tu configuración real de Firebase.
+  apiKey: "AIzaSyCRXbOEAp1QafN_EGyEdWGZXxbeXy0aZE4",
+  authDomain: "duoq-ranking-final.firebaseapp.com",
+  databaseURL: "https://duoq-ranking-final-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "duoq-ranking-final",
+  storageBucket: "duoq-ranking-final.firebasestorage.app",
+  messagingSenderId: "834663193099",
+  appId: "1:834663193099:web:32095cc8cedd420143c50e",
+  measurementId: "G-H0RERB82FJ"
+};
+
+// Inicializar Firebase
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
 
 // --- ESTADO GLOBAL ---
 let currentAdminData = []; // Almacena los datos de los jugadores cargados
@@ -23,22 +39,21 @@ let sortState = { // Almacena el estado actual de la ordenación
 
 // --- FUNCIONES DE ALMACENAMIENTO DE DATOS ---
 
-function getLocalData() {
-    const dataString = localStorage.getItem(DATA_STORAGE_KEY);
-    if (dataString) {
-        return JSON.parse(dataString);
+async function getFirebaseData() {
+    try {
+        const snapshot = await database.ref('/').once('value');
+        const data = snapshot.val();
+        // Firebase puede devolver un objeto o un array. Nos aseguramos de que sea un array.
+        return data ? Object.values(data) : [];
+    } catch (error) {
+        console.error("Error al cargar datos desde Firebase:", error);
+        return [];
     }
-    // Si no hay datos, cargar los datos por defecto del JSON (simulación)
-    return fetch('ranks.json')
-        .then(response => response.json())
-        .catch(error => {
-            console.error("Error al cargar ranks.json:", error);
-            return [];
-        });
 }
 
-function setLocalData(data) {
-    localStorage.setItem(DATA_STORAGE_KEY, JSON.stringify(data));
+async function setFirebaseData(data) {
+    // Para una estructura simple, reemplazamos todos los datos en la raíz.
+    await database.ref('/').set(data);
 }
 
 
@@ -207,7 +222,7 @@ async function loadAdminPanel() {
     memberFormsContainer.innerHTML = '<tr><td colspan="4">Cargando datos...</td></tr>';
     
     // Obtenemos los datos y los guardamos en el estado global
-    currentAdminData = await getLocalData();
+    currentAdminData = await getFirebaseData();
     
     // Renderizar la tabla por primera vez
     renderAdminTable();
@@ -238,7 +253,7 @@ document.getElementById('save-button').addEventListener('click', async () => {
     });
     
     // Guardar los datos actualizados en el LocalStorage
-    setLocalData(newData);
+    await setFirebaseData(newData);
 
     const saveMessage = document.getElementById('save-message');
     saveMessage.textContent = '¡Datos Guardados! Recargando ranking principal...';
