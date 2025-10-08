@@ -33,27 +33,6 @@ const parejasRanking = [
 ];
 
 
-// --- LECTURA DE DATOS (DESDE FIREBASE) ---
-
-// Pega aquí la misma configuración de Firebase que en admin.js
-const firebaseConfig = {
-  // Esta es tu configuración real de Firebase.
-  apiKey: "AIzaSyCRXbOEAp1QafN_EGyEdWGZXxbeXy0aZE4",
-  authDomain: "duoq-ranking-final.firebaseapp.com",
-  databaseURL: "https://duoq-ranking-final-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "duoq-ranking-final",
-  storageBucket: "duoq-ranking-final.firebasestorage.app",
-  messagingSenderId: "834663193099",
-  appId: "1:834663193099:web:32095cc8cedd420143c50e",
-  measurementId: "G-H0RERB82FJ"
-};
-
-// Inicializar Firebase (de forma segura, para evitar errores de doble inicialización)
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
-const database = firebase.database();
-
 async function fetchRankData() {
     try {
         console.log("Cargando datos desde Firebase...");
