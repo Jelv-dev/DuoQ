@@ -35,28 +35,40 @@ const parejasRanking = [
 
 // --- LECTURA DE DATOS (DEL ARCHIVO JSON LOCAL) ---
 
+const DATA_STORAGE_KEY = 'duoq_ranking_data'; // Clave para localStorage
+
 async function fetchRankData() {
     try {
-        const response = await fetch('ranks.json');
-        if (!response.ok) {
-            console.error(`Error al cargar ranks.json: ${response.statusText}`);
-            return null;
+        let data;
+        const localData = localStorage.getItem(DATA_STORAGE_KEY);
+
+        if (localData) {
+            // Si hay datos en localStorage, úsalos
+            console.log("Cargando datos desde localStorage.");
+            data = JSON.parse(localData);
+        } else {
+            // Si no, carga desde ranks.json como fallback
+            console.log("Cargando datos desde ranks.json (fallback).");
+            const response = await fetch('ranks.json');
+            if (!response.ok) {
+                console.error(`Error al cargar ranks.json: ${response.statusText}`);
+                return null;
+            }
+            data = await response.json();
         }
-        const data = await response.json();
 
         const rankMap = {};
         data.forEach(entry => {
             rankMap[entry.nombre] = {
-                summonerName: entry.summonerName,
+                ...entry, // Copiamos todas las propiedades
                 tier: entry.tier.toUpperCase(),
                 rank: entry.rank.toUpperCase(),
-                lp: entry.lp || 0,
-                leagueOfGraphsUrl: entry.leagueOfGraphsUrl
+                lp: entry.lp || 0
             };
         });
         return rankMap;
     } catch (error) {
-        console.error("Fallo en la lectura de ranks.json:", error);
+        console.error("Fallo en la lectura de datos de ranking:", error);
         return null;
     }
 }
