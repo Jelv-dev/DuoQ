@@ -2,7 +2,7 @@
 
 const firebaseConfig = {
   // Esta es tu configuración real de Firebase.
-  apiKey: "AIzaSyCRXbOEAp1QafN_EGyEdWGZXxbeXy0aZE4",
+  apiKey: "AIzaSyDzO9PfxhavRI5B30Lz4Se4shklV2VRycc",
   authDomain: "duoq-ranking-final.firebaseapp.com",
   databaseURL: "https://duoq-ranking-final-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "duoq-ranking-final",
